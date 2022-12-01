@@ -3,6 +3,14 @@ Segmenting and Detecting oil seeps from Synthetic Aperture Radar images
 
 Developed a unique petroleum seep detection technique that involves segmentation and categorisation of oil slicks on the ocean surface contained within Synthetic Aperture Radar (SAR) imagery.
 
+### Table of Contents
+1. [Dataset](#dataset)
+2. [Background](#background)
+3. [UNet Architecture](#unet-architecture)
+4. [Training](#training)
+5. [Loss functions](#loss-functions)
+6. [Results](#results)
+
 ### Dataset
 
 <p align="center">
@@ -106,4 +114,25 @@ Parameters used: $\gamma = 0.75$
 
 Given that for each pixel we get a value between 0 to 1, where 0 represents no seep and 1 represents seep. We take 0.5 as the threshold to decide whether to classify a pixel as non-seep or seep. This output is called Seep Predicted binary.
 
+| Loss Function             | Accuracy  | Loss  |
+| :------------             |:---------:| :----:|
+| **Binary Cross Entropy**  | 0.9856    | 0.0515|
+| **Binary Focal Loss**     | 0.9855    | 0.0296|
+| **Focal Tversky Entropy** | 0.9842    | 0.5287|
 
+From the results the numbers we don’t get very conclusive results but if we compare the outputs, for example: we see that the Focal Tversky Loss is more “generous” when detecting seeps. Given that we want to obtain a high recall (most of the seeps are recognised, i.e., we want a low number of false negatives), our best model is the UNet that uses the Focal Tversky loss function.
+
+One possible extension of this project would be to calculate the Dice coefficient, the precision and the recall of each of the models to support our conclusion.
+
+#### Binary Cross Entropy
+<p align="center">
+  <img src="https://github.com/lavinama/Oil-Seep-Detection/blob/main/media/model-seep-focal-mask-0-1.png", width=300 />
+</p>
+#### Binary Focal Loss
+<p align="center">
+  <img src="https://github.com/lavinama/Oil-Seep-Detection/blob/main/media/model-seep-focal-mask-0-1.png", width=300 />
+</p>
+#### Focal Tversky Entropy
+<p align="center">
+  <img src="https://github.com/lavinama/Oil-Seep-Detection/blob/main/media/model-seep-focal-mask-0-1.png", width=300 />
+</p>
