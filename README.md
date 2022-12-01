@@ -59,6 +59,9 @@ There are other methods for semantic segmentation such as: FCN-VGG16, DeepLab, D
 
 * Evaluation Metric: Accuracy
 * Optimiser: Adam Optimiser
+  * We use the Adam optimiser because combines the advantage of the Adagrad and RMSProp:
+    * Adagrad: good performance on sparse data e.g. computer vision and natural languange processing
+    * RMSprop: good performance on online and non-stationary problems e.g. noisy data
 * We reduce the learning rate by a factor of 0.1 if the validation loss does not improve for 5 continues epochs reaching a minimum of 0.00001 `ReduceLROnPlateau`.
 * We apply early stopping if the validation loss does not improve for 10 continuous epochs `EarlyStopping`.
 * Hyperparameters:
@@ -126,13 +129,15 @@ One possible extension of this project would be to calculate the Dice coefficien
 
 #### Binary Cross Entropy
 <p align="center">
-  <img src="https://github.com/lavinama/Oil-Seep-Detection/blob/main/media/model-seep-focal-mask-0-1.png", width=300 />
+  <img src="https://github.com/lavinama/Oil-Seep-Detection/blob/main/media/results/bce_result.png", width=800 />
 </p>
+
 #### Binary Focal Loss
 <p align="center">
-  <img src="https://github.com/lavinama/Oil-Seep-Detection/blob/main/media/model-seep-focal-mask-0-1.png", width=300 />
+  <img src="https://github.com/lavinama/Oil-Seep-Detection/blob/main/media/results/focal_result.png", width=800 />
 </p>
+
 #### Focal Tversky Entropy
 <p align="center">
-  <img src="https://github.com/lavinama/Oil-Seep-Detection/blob/main/media/model-seep-focal-mask-0-1.png", width=300 />
+  <img src="https://github.com/lavinama/Oil-Seep-Detection/blob/main/media/results/tversky_focal_result.png", width=800 />
 </p>
