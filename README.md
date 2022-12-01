@@ -6,7 +6,7 @@ Developed a unique petroleum seep detection technique that involves segmentation
 ### Dataset
 
 <p align="center">
-  <img src="https://github.com/lavinama/UNet/blob/main/media/preview_data.png", width=400 />
+  <img src="https://github.com/lavinama/Oil-Seep-Detection/blob/main/media/example_dataset.png", width=500 />
 </p>
 
 There are two possible tasks that can be carried out using this dataset:
@@ -59,5 +59,51 @@ There are other methods for semantic segmentation such as: FCN-VGG16, DeepLab, D
 
 ### Loss functions
 
-In this project we are going to evaluate different loss functions. 
+In this project we are going to evaluate different loss functions.
+
+As we see from the sample given above the background class (the non-seep) is much larger than the other seep classes (more than 90% of the pixels). We can fall into a trap when using accuracy as our evaluation metric. For example, if we have a model that predicts all the pixels being non-seep we are going to get an accuracy of more than 90% but not a very useful model for segmenting seeps. Hence, we are going different loss functions to overcome this class imbalance.
+
+#### Binary Cross Entropy (BCE)
+
+```math
+BCE(\hat{p}, p) = -\left(p \cdot \log(p) + (1 - \hat{p}) \cdot \log(1 - p)\right)
+```
+This is the simplest loss function when dealing with two classes. The idea is to have a loss function that predicts a high probability for a positive example, and a low probability for a negative example. The problem with BCE is that if we miss all the seeps which only account for a minority, we still receive a low loss.
+
+#### Binary Focal Loss (FL)
+
+```math
+FL(\hat{p}) = -\alpha(1 - \hat{p})^{\gamma} \cdot \log(\hat{p}))
+```
+This loss function generalizes binary cross-entropy by introducing a hyperparameter called the focusing parameter $\gamma$ that allows hard-to-classify examples to be penalized more heavily relative to easy-to-classify examples. The idea is that if a sample is already well-classified, we can significantly decrease its contribution to the loss.
+
+To solve the class imbalance problem, it incorporates a weighting parameter $\alpha$, which is usually the inverse class frequency. $\alpha$ is the weighted term whose value is $\alpha$ for the seep class and $1 - \alpha$ for the non-seep class.
+
+Parameters used: $\gamma = 0.75$
+
+#### Tversky Loss
+
+This loss deals with imbalanced datasets by utilising constants that can adjust how harshly different types of error are penalised in the loss function. The Tversky loss uses the Tversky Index (TI):
+```math
+TI = \frac{TP}{TP + \alpha FN + \beta FP}
+```
+The loss function is weighted by the constants $\alpha$ and $\beta$ that penalise false positives (FP) and false negatives (FN) respectively to a higher degree in the loss function as their value is increased. The $\beta$ constant in particular has applications in situations where models can obtain misleadingly positive performance via highly conservative prediction.
+
+Parameters used: $\alpha = 0.7$,  $\beta = 0.3$
+
+#### Focal Tversky Loss
+
+```math
+FTL = (1 - TI)^{\gamma}
+```
+Focal Tversky loss is a combination of the Binary Focal loss and the Tversky loss.
+
+Parameters used: $\gamma = 0.75$
+
+*Extension: For the classification task we would have to use variations of the loss functions for multiclass classification such as Sparse Categorical Cross Entropy or Sparse Categorical Focal Loss.*
+
+### Results
+
+Given that for each pixel we get a value between 0 to 1, where 0 represents no seep and 1 represents seep. We take 0.5 as the threshold to decide whether to classify a pixel as non-seep or seep. This output is called Seep Predicted binary.
+
 
